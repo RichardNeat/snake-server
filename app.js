@@ -3,6 +3,7 @@ const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.c
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
 app.get('/api/leaderboard', getLeaderboard);
