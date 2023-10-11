@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.controllers');
 
 const app = express();
