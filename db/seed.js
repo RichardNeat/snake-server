@@ -1,19 +1,26 @@
-const client = require('./index');
+const db = require('./index');
+const format = require("pg-format");
 
 const seed = async (leaderboard) => {
-    await client.connect();
-    try {
-        const db = client.db('snake'); // name of the database
-        const collection = db.collection('leaderboard'); // name of the collection
-        await collection.deleteMany({});
-        await collection.insertMany(leaderboard);
-    }
-    catch (error) {
-        console.log(error, "error")
-    }
-    finally {
-        console.log("seeding complete")
-    }
+
+    await db.query(`DROP TABLE IF EXISTS leaderboard;`);
+
+    await db.query (`
+        CREATE TABLE leaderboard (
+            leaderboard_id SERIAL PRIMARY KEY,
+            name VARCHAR,
+            score INT
+        );`
+    );
+
+    const insertLeaderBoardStr = format(`
+        INSERT INTO leaderboard 
+        (name, score)
+        VALUES %L
+    ;`
+    , leaderboard.map(({name, score}) => [name, score]));
+
+    await db.query(insertLeaderBoardStr);
 };
 
 module.exports = seed;

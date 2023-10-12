@@ -1,12 +1,12 @@
 const request = require('supertest');
 const app = require('../app');
-const client = require('../db/index');
+const db = require('../db/index');
 const data = require('../db/data/leaderboard');
 const seed = require('../db/seed');
 
 beforeEach(() => seed(data));
 
-afterAll(() => client.close());
+afterAll(() => db.end());
 
 describe('leaderboard', () => {
     describe('GET', () => {
@@ -14,7 +14,7 @@ describe('leaderboard', () => {
             return request(app).get('/api/leaderboard').expect(200).then(({body}) => {
                 expect(body.leaderboard).toHaveLength(2);
                 body.leaderboard.forEach((entry) => {
-                    expect(entry._id).toEqual(expect.any(String));
+                    expect(entry.leaderboard_id).toEqual(expect.any(Number));
                     expect(entry.name).toEqual(expect.any(String));
                     expect(entry.score).toEqual(expect.any(Number));
                 });
@@ -34,7 +34,7 @@ describe('leaderboard', () => {
             };
             return request(app).post('/api/leaderboard').send(newEntry).expect(201).then(({body}) => {
                 expect(body.leaderboard).toMatchObject({
-                    _id: expect.any(String),
+                    leaderboard_id: 3,
                     name: 'Niamh',
                     score: 5000
                 });

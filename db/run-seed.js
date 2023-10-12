@@ -1,6 +1,9 @@
 const data = require('./data/leaderboard');
 const seed = require('./seed');
+const db = require('../db/index');
 
-const client = require('./index');
+const runSeed = () => {
+  return seed(data).then(() => db.end());
+};
 
-seed(data).then(() => client.close());
+runSeed();
