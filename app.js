@@ -1,18 +1,22 @@
 const express = require('express');
 const cors = require('cors');
-const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.controllers');
+const { getLeaderboard, postLeaderboard, removeLeaderboard } = require('./controllers/leaderboard.controllers');
 
 const app = express();
 
-app.use(cors());
+var corsOptions = {
+    origin: 'https://richardneat.github.io/snake/',
+    optionsSuccessStatus: 200
+};
+
 app.use(express.json());
 
 app.get('/api/leaderboard', getLeaderboard);
-app.post('/api/leaderboard', postLeaderboard);
+app.post('/api/leaderboard', cors(corsOptions), postLeaderboard);
 
 app.use((err, req, res, next) => {
-    if (err.status === 400) {
-        res.status(400).send({msg: 'bad request'});
+    if (err.status) {
+        res.status(err.status).send({msg: err.msg});
     } else {
         next(err);
     };

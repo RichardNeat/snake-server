@@ -1,4 +1,4 @@
-const { selectLeaderboard, insertLeaderboard } = require("../models/leaderboard.models")
+const { selectLeaderboard, insertLeaderboard, deleteLeaderboard } = require("../models/leaderboard.models")
 
 exports.getLeaderboard = (req, res, next) => {
     selectLeaderboard().then((leaderboard) => {
