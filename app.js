@@ -3,11 +3,20 @@ const cors = require('cors');
 const { getLeaderboard, postLeaderboard, removeLeaderboard } = require('./controllers/leaderboard.controllers');
 
 const app = express();
+let corsOptions = {};
 
-var corsOptions = {
-    origin: 'https://richardneat.github.io/snake/',
-    optionsSuccessStatus: 200
-};
+if (!process.env.NODE_ENV !== 'test') {
+    const whitelist = ['https://richardneat.github.io/snake/'];
+    corsOptions = {
+      origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      }
+    }
+}
 
 app.use(express.json());
 
