@@ -11,7 +11,7 @@ var corsOptions = {
 
 app.use(express.json());
 
-app.get('/api/leaderboard', getLeaderboard);
+app.get('/api/leaderboard', cors(corsOptions), getLeaderboard);
 app.post('/api/leaderboard', cors(corsOptions), postLeaderboard);
 
 app.use((err, req, res, next) => {
