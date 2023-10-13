@@ -6,7 +6,7 @@ exports.selectLeaderboard = () => {
     });
 };
 
-exports.insertLeaderboard = async (newEntry) => {
+exports.insertLeaderboard = (newEntry) => {
     const {name, score} = newEntry;
     if (!name || !score) {
         return Promise.reject({
@@ -14,8 +14,18 @@ exports.insertLeaderboard = async (newEntry) => {
             msg: 'bad request'
         });
     };
-    return db.query('INSERT INTO leaderboard (name, score) VALUES ($1, $2) RETURNING *;', ([name, score]))
-    .then(({rows}) => {
-        return rows[0];
+    return db.query(`
+        DELETE FROM leaderboard
+        WHERE leaderboard_id = (
+        SELECT leaderboard_id
+        FROM leaderboard
+        WHERE score = (SELECT MIN(score) FROM leaderboard)
+        LIMIT 1
+    );
+    `).then(() => {
+        return db.query('INSERT INTO leaderboard (name, score) VALUES ($1, $2) RETURNING *;', ([name, score]))
+        .then(({rows}) => {
+            return rows[0];
+        });
     });
 };

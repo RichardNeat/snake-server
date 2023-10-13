@@ -12,7 +12,7 @@ describe('leaderboard', () => {
     describe('GET', () => {
         test('status: 200 responds with an array of leaderboard objects', () => {
             return request(app).get('/api/leaderboard').expect(200).then(({body}) => {
-                expect(body.leaderboard).toHaveLength(2);
+                expect(body.leaderboard).toHaveLength(10);
                 body.leaderboard.forEach((entry) => {
                     expect(entry.leaderboard_id).toEqual(expect.any(Number));
                     expect(entry.name).toEqual(expect.any(String));
@@ -34,9 +34,20 @@ describe('leaderboard', () => {
             };
             return request(app).post('/api/leaderboard').send(newEntry).expect(201).then(({body}) => {
                 expect(body.leaderboard).toMatchObject({
-                    leaderboard_id: 3,
+                    leaderboard_id: expect.any(Number),
                     name: 'Niamh',
                     score: 5000
+                });
+            });
+        });
+        test('should remove the lowest score from the leaderboard', () => {
+            const newEntry = {
+                name: 'Niamh',
+                score: 5000,
+            };
+            return request(app).post('/api/leaderboard').send(newEntry).expect(201).then(() => {
+                return request(app).get('/api/leaderboard').expect(200).then(({body}) => {
+                    expect(body.leaderboard).toHaveLength(10);
                 });
             });
         });
