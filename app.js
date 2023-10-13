@@ -8,8 +8,8 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get('/api/leaderboard', cors(corsOptions), getLeaderboard);
-app.post('/api/leaderboard', cors(corsOptions), postLeaderboard);
+app.get('/api/leaderboard', getLeaderboard);
+app.post('/api/leaderboard', postLeaderboard);
 
 app.use((err, req, res, next) => {
     if (err.status) {
