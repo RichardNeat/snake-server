@@ -1,6 +1,7 @@
 const { selectLeaderboard, insertLeaderboard, deleteLeaderboard } = require("../models/leaderboard.models")
 
 exports.getLeaderboard = (req, res, next) => {
+    console.log(req.get('User-Agent'))
     selectLeaderboard().then((leaderboard) => {
         res.status(200).send({leaderboard});
     })

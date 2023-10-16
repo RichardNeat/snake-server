@@ -4,21 +4,15 @@ const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.c
 
 const app = express();
 
-const allowedOrigins = [
-    'https://richardneat.github.io/snake',
-    'http://localhost:3000',
-];
+app.use(cors());
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        } else {
-        callback(new Error('Not allowed by CORS'));
-        }
-    },
-    optionsSuccessStatus: 200,
-}));
+app.use((req, res, next) => {
+    const userAgent = req.get('User-Agent');
+    if (userAgent && (userAgent.includes('Postman') || userAgent.includes('Insomnia'))) {
+      return res.status(403).json({ error: 'Oi stop trying to hack my snake game 🐍' });
+    }
+    next();
+});
 
 app.use(express.json());
 
