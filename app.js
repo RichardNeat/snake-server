@@ -5,10 +5,10 @@ const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.c
 const app = express();
 
 const allowedOrigin = 'https://richardneat.github.io/snake';
-console.log(allowedOrigin)
 
 const corsOptions = {
   origin: (origin, callback) => {
+    console.log(origin)
     if (origin === allowedOrigin) {
       callback(null, true);
     } else {
