@@ -8,7 +8,6 @@ const allowedOrigin = 'https://richardneat.github.io';
 
 const corsOptions = {
   origin: (origin, callback) => {
-    console.log(origin)
     if (origin === allowedOrigin) {
       callback(null, true);
     } else {
@@ -43,7 +42,7 @@ app.use((err, req, res, next) => {
 
 app.use((err, req, res, next) => {
     console.log(err);
-    res.status(500).send({msg: "internal server error"});
+    res.status(500).send({msg: "oi stop trying to hack my snake game 🐍"});
 });
 
 module.exports = app;
