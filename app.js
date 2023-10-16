@@ -4,20 +4,21 @@ const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.c
 
 const app = express();
 
-const allowedOrigins = [
-    'https://richardneat.github.io/snake'
-];
-  
-app.use(cors({
-origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-    callback(null, true);
+const allowedOrigin = 'https://richardneat.github.io/snake';
+console.log(allowedOrigin)
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (origin === allowedOrigin) {
+      callback(null, true);
     } else {
-    callback(new Error('Not allowed by CORS'));
+      callback(new Error('Not allowed by CORS'));
     }
-},
-optionsSuccessStatus: 200,
-}));
+  },
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.use((req, res, next) => {
     const userAgent = req.get('User-Agent');
