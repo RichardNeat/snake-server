@@ -4,7 +4,7 @@ const { getLeaderboard, postLeaderboard } = require('./controllers/leaderboard.c
 
 const app = express();
 
-const allowedOrigin = 'https://richardneat.github.io/snake';
+const allowedOrigin = 'https://richardneat.github.io';
 
 const corsOptions = {
   origin: (origin, callback) => {
